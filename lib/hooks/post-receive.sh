@@ -13,6 +13,23 @@ if [ -f /etc/profile ]; then
   export PATH
 fi
 
+# make sure rvm is loaded if it exists
+if [ -f $HOME/.rvm/scripts/rvm ]; then
+  source $HOME/.rvm/scripts/rvm
+elif [ -f /usr/local/rvm/scripts/rvm ]; then
+  source /usr/local/rvm/scripts/rvm
+fi
+
+# load rvmrc if it exists and rvm is started
+if [ -f .rvmrc ]; then
+  if [ ! -z "$rvm_path" ]; then
+    source .rvmrc
+  else
+    echo "We have a .rvmrc file, but RVM is not loaded. Aborting."
+    exit
+  fi
+fi
+
 # get the current branch
 head="$(git symbolic-ref HEAD)"
 
